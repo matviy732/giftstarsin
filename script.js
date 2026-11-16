@@ -1,11 +1,7 @@
-// Ініціалізація Telegram Web App
 const tg = window.Telegram?.WebApp;
-if (tg) {
-    tg.ready();
-    tg.expand();
-}
+if (tg) { tg.ready(); tg.expand(); }
 
-let userState = JSON.parse(localStorage.getItem('giftstarsin_full_state')) || {
+let userState = JSON.parse(localStorage.getItem('giftstarsin_v3_state')) || {
     balance: 0.78,
     deposits: 589.00,
     withdraws: 397.78,
@@ -13,20 +9,16 @@ let userState = JSON.parse(localStorage.getItem('giftstarsin_full_state')) || {
     wins: 76,
     losses: 66,
     streak: 0,
-    lastBonusDate: null,
     language: 'Українська'
 };
 
-let crashInterval = null;
-
 function saveState() {
-    localStorage.setItem('giftstarsin_full_state', JSON.stringify(userState));
+    localStorage.setItem('giftstarsin_v3_state', JSON.stringify(userState));
     updateUI();
 }
 
 function updateUI() {
-    const formattedBalance = userState.balance.toFixed(2);
-    document.getElementById('balance-amount').textContent = formattedBalance;
+    document.getElementById('balance-amount').textContent = userState.balance.toFixed(2);
     document.getElementById('stat-deposits').textContent = `${userState.deposits.toFixed(0)} ⭐️`;
     document.getElementById('stat-withdraws').textContent = `${userState.withdraws.toFixed(2)} ⭐️`;
     document.getElementById('streak-count').textContent = userState.streak || 0;
@@ -45,14 +37,8 @@ function switchTab(tabName) {
 }
 
 function validateBet(bet) {
-    if (isNaN(bet) || bet <= 0) {
-        alert('Введи коректну ставку!');
-        return false;
-    }
-    if (bet > userState.balance) {
-        alert('Недостатньо зірок на балансі!');
-        return false;
-    }
+    if (isNaN(bet) || bet <= 0) { alert('Введи коректну ставку!'); return false; }
+    if (bet > userState.balance) { alert('Недостатньо зірок на балансі!'); return false; }
     return true;
 }
 
@@ -69,7 +55,6 @@ function renderLeaders() {
         { name: 'Матвій (Ти)', score: userState.balance, isMe: true }
     ];
     leaders.sort((a, b) => b.score - a.score);
-
     const listEl = document.getElementById('leaders-list');
     if (listEl) {
         listEl.innerHTML = leaders.map((p, idx) => `
@@ -84,20 +69,16 @@ function renderLeaders() {
     }
 }
 
-// Модальні вікна (Поповнення, Виведення, Мова, Рефералка тощо)
-function openModal(htmlContent) {
-    document.getElementById('modal-content').innerHTML = htmlContent;
+function openModal(html) {
+    document.getElementById('modal-content').innerHTML = html;
     document.getElementById('modal-overlay').style.display = 'flex';
 }
-
-function closeModals() {
-    document.getElementById('modal-overlay').style.display = 'none';
-}
+function closeModals() { document.getElementById('modal-overlay').style.display = 'none'; }
 
 function openDepositModal() {
     openModal(`
         <h3 style="margin-bottom:12px;">Поповнення балансу</h3>
-        <p style="color:#a09cc0; font-size:13px; margin-bottom:16px;">Надішліть подарунок на @giftstarsin_bank або виберіть метод оплати:</p>
+        <p style="color:#a09cc0; font-size:13px; margin-bottom:16px;">Виберіть суму поповнення або надішліть подарунок:</p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px;">
             <button class="action-btn gold-btn" onclick="addBalance(50)">+50 ⭐️</button>
             <button class="action-btn gold-btn" onclick="addBalance(200)">+200 ⭐️</button>
@@ -105,41 +86,30 @@ function openDepositModal() {
         <button class="play-main-btn" onclick="closeModals()">Готово</button>
     `);
 }
-
 function addBalance(amount) {
     userState.balance += amount;
     userState.deposits += amount;
     saveState();
-    alert(`Баланс успішно поповнено на +${amount} ⭐️!`);
+    alert(`Баланс поповнено на +${amount} ⭐️!`);
     closeModals();
 }
 
 function openWithdrawModal() {
     openModal(`
         <h3 style="margin-bottom:12px;">Виведення зірок</h3>
-        <p style="color:#a09cc0; font-size:13px; margin-bottom:16px;">Комісія 10%. Залишилось відіграти оборот.</p>
+        <p style="color:#a09cc0; font-size:13px; margin-bottom:16px;">Комісія 10%.</p>
         <div class="bet-input-row" style="margin-bottom:16px;">
             <input type="number" id="withdraw-input" class="bet-input" placeholder="Сума (від 50 ⭐️)" min="50">
         </div>
         <button class="play-main-btn" onclick="processWithdraw()">Вивести</button>
     `);
 }
-
 function processWithdraw() {
     const val = parseFloat(document.getElementById('withdraw-input').value);
-    if (isNaN(val) || val < 50) {
-        alert('Мінімальна сума виведення: 50 ⭐️');
-        return;
-    }
-    if (val > userState.balance) {
-        alert('Недостатньо зірок на балансі!');
-        return;
-    }
-    userState.balance -= val;
-    userState.withdraws += val;
-    saveState();
-    alert(`Заявка на виведення ${val} ⭐️ створена!`);
-    closeModals();
+    if (isNaN(val) || val < 50) { alert('Мінімум 50 ⭐️'); return; }
+    if (val > userState.balance) { alert('Недостатньо коштів'); return; }
+    userState.balance -= val; userState.withdraws += val;
+    saveState(); alert(`Заявка на виведення ${val} ⭐️ створена!`); closeModals();
 }
 
 function openLanguageModal() {
@@ -147,243 +117,169 @@ function openLanguageModal() {
     openModal(`
         <h3 style="margin-bottom:12px;">Виберіть мову</h3>
         <div style="display:flex; flex-direction:column; gap:8px;">
-            ${langs.map(l => `
-                <button class="menu-link-row" onclick="setLanguage('${l}')">
-                    <span>${l}</span>
-                    <span>${userState.language === l ? '✓' : ''}</span>
-                </button>
-            `).join('')}
+            ${langs.map(l => `<button class="menu-link-row" onclick="setLang('${l}')"><span>${l}</span><span>${userState.language === l ? '✓' : ''}</span></button>`).join('')}
         </div>
     `);
 }
-
-function setLanguage(lang) {
-    userState.language = lang;
-    saveState();
-    closeModals();
-}
-
-function openActivityModal() {
-    openModal(`
-        <h3 style="margin-bottom:12px;">Ваша активність</h3>
-        <p style="color:#a09cc0; font-size:13px;">Ігор зіграно: ${userState.gamesPlayed} (Перемог: ${userState.wins}, Поразок: ${userState.losses})</p>
-    `);
-}
-
-function openReferralModal() {
-    openModal(`
-        <h3 style="margin-bottom:12px;">Реферальна програма</h3>
-        <p style="color:#a09cc0; font-size:13px; margin-bottom:12px;">Отримуйте 10% від перших поповнень друзів!</p>
-        <button class="play-main-btn" onclick="inviteFriend()">Поділитися посиланням</button>
-    `);
-}
-
-function openDailyBonusModal() {
-    openModal(`
-        <h3 style="margin-bottom:12px;">Щоденний бонус</h3>
-        <p style="color:#a09cc0; font-size:13px; margin-bottom:12px;">Грай щодня та забирай нагороди!</p>
-        <button class="play-main-btn" onclick="claimDaily()">Забрати +25 ⭐️</button>
-    `);
-}
-
-function claimDaily() {
-    userState.balance += 25;
-    userState.streak += 1;
-    saveState();
-    alert('Бонус отримано: +25 ⭐️!');
-    closeModals();
-}
-
-function openRakebackModal() {
-    openModal(`
-        <h3 style="margin-bottom:12px;">Рейкбек</h3>
-        <p style="color:#a09cc0; font-size:13px;">Ваш рівень: Новачок (0.25%). Накопичено доступних зірок для збору.</p>
-    `);
-}
-
+function setLang(l) { userState.language = l; saveState(); closeModals(); }
+function openActivityModal() { openModal(`<h3 style="margin-bottom:12px;">Активність</h3><p style="color:#a09cc0;">Ігор: ${userState.gamesPlayed} | Перемог: ${userState.wins} | Поразок: ${userState.losses}</p>`); }
+function openReferralModal() { openModal(`<h3 style="margin-bottom:12px;">Реферали</h3><p style="color:#a09cc0;">10% від поповнень друзів.</p><button class="play-main-btn" onclick="inviteFriend()">Поділитися</button>`); }
+function openDailyBonusModal() { openModal(`<h3 style="margin-bottom:12px;">Щоденний бонус</h3><p style="color:#a09cc0;">Отримай безкоштовні зірки!</p><button class="play-main-btn" onclick="claimDaily()">Забрати +25 ⭐️</button>`); }
+function claimDaily() { userState.balance += 25; userState.streak++; saveState(); alert('Отримано +25 ⭐️'); closeModals(); }
+function openRakebackModal() { openModal(`<h3 style="margin-bottom:12px;">Рейкбек</h3><p style="color:#a09cc0;">Ваш рівень: Новачок (0.25%).</p>`); }
 function inviteFriend() {
-    const appUrl = 'https://t.me/GiftStartGameBot';
-    if (tg) {
-        tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(appUrl)}&text=${encodeURIComponent('Грай у GiftStarsin та отримуй зірки!')}`);
-    } else {
-        alert('Посилання скопійовано: ' + appUrl);
-    }
+    const url = 'https://t.me/GiftStartGameBot';
+    if (tg) { tg.openTelegramLink(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent('Грай у GiftStarsin!')}`); }
+    else { alert('Посилання: ' + url); }
 }
 
-// Ігри: Краш, Плінко, Міни тощо
-function openGame(gameType) {
+function openSettingsModal() {
+    if (confirm('Скинути баланс та прогрес?')) { localStorage.clear(); location.reload(); }
+}
+
+// Управління іграми
+function openGame(type) {
     closeModals();
-    document.querySelectorAll('.tab-view').forEach(tab => tab.style.display = 'none');
-    const gameScreen = document.getElementById('game-screen');
-    const titleEl = document.getElementById('current-game-title');
-    const containerEl = document.getElementById('game-container');
+    document.querySelectorAll('.tab-view').forEach(t => t.style.display = 'none');
+    document.getElementById('game-screen').style.display = 'block';
+    const title = document.getElementById('current-game-title');
+    const container = document.getElementById('game-container');
 
-    gameScreen.style.display = 'block';
-
-    if (gameType === 'crash') {
-        titleEl.textContent = '🚀 Краш / Літак';
-        renderCrash(containerEl);
-    } else if (gameType === 'plinko') {
-        titleEl.textContent = '📐 Плінко (Plinko)';
-        renderPlinko(containerEl);
-    } else if (gameType === 'mines') {
-        titleEl.textContent = '💣 Міни';
-        renderMines(containerEl);
-    } else if (gameType === 'cases') {
-        titleEl.textContent = '📦 Кейси';
-        renderCases(containerEl);
-    } else {
-        titleEl.textContent = '🎮 Мінігра';
-        containerEl.innerHTML = `<div class="game-panel"><p>Ця гра завантажується...</p></div>`;
-    }
+    if (type === 'shaft') { title.textContent = '⛏️ Шахта / Кирка'; renderShaftGame(container); }
+    else if (type === 'crash') { title.textContent = '🚀 Краш'; container.innerHTML = `<div class="game-panel"><p>Краш гра активна</p></div>`; }
+    else if (type === 'plinko') { title.textContent = '📐 Плінко'; container.innerHTML = `<div class="game-panel"><p>Плінко гра активна</p></div>`; }
+    else if (type === 'cases') { title.textContent = '📦 Кейси'; container.innerHTML = `<div class="game-panel"><p>Кейси активні</p></div>`; }
+    else if (type === 'mines') { title.textContent = '💣 Міна'; container.innerHTML = `<div class="game-panel"><p>Міни активні</p></div>`; }
+    else { title.textContent = '🎮 Гра'; container.innerHTML = `<div class="game-panel"><p>Гра завантажується...</p></div>`; }
 }
 
 function closeGame() {
-    if (crashInterval) clearInterval(crashInterval);
     document.getElementById('game-screen').style.display = 'none';
 }
 
-// 1. КРАШ
-function renderCrash(container) {
+// ІНТЕРАКТИВНА ГРА "ШАХТА / КИРКА" З АНІМАЦІЄЮ РУЙНУВАННЯ БЛОКІВ
+function renderShaftGame(container) {
     container.innerHTML = `
-        <div class="game-panel">
-            <div class="crash-display">
-                <div style="font-size:36px;" id="crash-rocket">🚀</div>
-                <div class="crash-multiplier" id="crash-mult">1.00x</div>
+        <div class="game-panel shaft-game-wrapper">
+            <div class="shaft-wheel-box">
+                <div class="shaft-wheel-inner" id="shaft-gear">⚙️</div>
             </div>
+            
+            <div class="shaft-grid" id="shaft-grid">
+                <!-- Блоки шахти генеруються динамічно -->
+            </div>
+
             <div class="bet-controls">
                 <div class="bet-input-row">
-                    <input type="number" id="crash-bet" class="bet-input" value="10" min="1">
-                    <button class="quick-bet-btn" onclick="document.getElementById('crash-bet').value = Math.floor(userState.balance)">MAX</button>
+                    <input type="number" id="shaft-bet" class="bet-input" value="1" min="1">
+                    <button class="quick-bet-btn" onclick="document.getElementById('shaft-bet').value=Math.floor(userState.balance)">MAX</button>
                 </div>
-                <button class="play-main-btn" id="crash-btn" onclick="startCrash()">Зробити ставку</button>
+                <button class="play-main-btn" onclick="playShaftMine()">Копати 1 ⭐️</button>
             </div>
-            <div class="game-status-msg" id="crash-msg"></div>
+            <div class="game-status-msg" id="shaft-msg"></div>
         </div>
     `;
+    initShaftGrid();
 }
 
-let isFlying = false;
-let mult = 1.00;
-let crashAt = 1.00;
-let cBet = 10;
+const blockTypes = [
+    { type: 'dirt', icon: '🟫', mult: 0 },
+    { type: 'coal', icon: '⬛️', mult: 0.5 },
+    { type: 'iron', icon: '⬜️', mult: 1.2 },
+    { type: 'gold', icon: '🟧', mult: 2.5 },
+    { type: 'diamond', icon: '💎', mult: 5.0 },
+    { type: 'chest', icon: '🧰', mult: 10.0 }
+];
 
-function startCrash() {
-    const btn = document.getElementById('crash-btn');
-    if (!isFlying) {
-        cBet = parseFloat(document.getElementById('crash-bet').value);
-        if (!validateBet(cBet)) return;
-        userState.balance -= cBet;
-        userState.gamesPlayed++;
-        saveState();
+function getRandomBlock() {
+    const rand = Math.random();
+    if (rand < 0.4) return blockTypes[0];
+    if (rand < 0.65) return blockTypes[1];
+    if (rand < 0.82) return blockTypes[2];
+    if (rand < 0.93) return blockTypes[3];
+    if (rand < 0.98) return blockTypes[4];
+    return blockTypes[5];
+}
 
-        isFlying = true;
-        mult = 1.00;
-        crashAt = +(1.06 + Math.random() * 3.5).toFixed(2);
-        btn.textContent = 'Забрати виграш';
-        document.getElementById('crash-msg').textContent = 'Ракета летить...';
+let shaftRowsData = [];
 
-        crashInterval = setInterval(() => {
-            mult += 0.04;
-            document.getElementById('crash-mult').textContent = mult.toFixed(2) + 'x';
-            btn.textContent = `Забрати ${(cBet * mult).toFixed(2)} ⭐️`;
-
-            if (mult >= crashAt) {
-                clearInterval(crashInterval);
-                isFlying = false;
-                document.getElementById('crash-rocket').textContent = '💥';
-                document.getElementById('crash-mult').style.color = '#e74c3c';
-                document.getElementById('crash-msg').textContent = `Краш на ${crashAt.toFixed(2)}x!`;
-                userState.losses++;
-                saveState();
-                btn.textContent = 'Зробити ставку';
-            }
-        }, 90);
-    } else {
-        clearInterval(crashInterval);
-        isFlying = false;
-        const win = cBet * mult;
-        userState.balance += win;
-        userState.wins++;
-        saveState();
-        document.getElementById('crash-msg').textContent = `Виведено виграш +${win.toFixed(2)} ⭐️!`;
-        document.getElementById('crash-btn').textContent = 'Зробити ставку';
+function initShaftGrid() {
+    shaftRowsData = [];
+    for (let r = 0; r < 5; r++) {
+        let row = [];
+        for (let c = 0; c < 6; c++) {
+            row.push(getRandomBlock());
+        }
+        shaftRowsData.push(row);
     }
+    drawShaftGrid();
 }
 
-// 2. ПЛІНКО
-function renderPlinko(container) {
-    container.innerHTML = `
-        <div class="game-panel">
-            <p style="color:#a09cc0; font-size:13px; margin-bottom:10px;">Вибери ризик і кидай кульку!</p>
-            <div style="font-size:48px; margin:15px 0;">⚪️ 🔻 🔴</div>
-            <div class="bet-controls">
-                <div class="bet-input-row">
-                    <input type="number" id="plinko-bet" class="bet-input" value="10" min="1">
-                    <button class="quick-bet-btn" onclick="document.getElementById('plinko-bet').value = Math.floor(userState.balance)">MAX</button>
-                </div>
-                <button class="play-main-btn" onclick="playPlinko()">Кинути кульку</button>
-            </div>
-            <div class="game-status-msg" id="plinko-msg"></div>
+function drawShaftGrid() {
+    const gridEl = document.getElementById('shaft-grid');
+    if (!gridEl) return;
+    gridEl.innerHTML = shaftRowsData.map((row, rIdx) => `
+        <div class="shaft-row" id="row-${rIdx}">
+            ${row.map(b => `<div class="shaft-block ${b.type}">${b.icon}</div>`).join('')}
         </div>
-    `;
+    `).join('');
 }
 
-function playPlinko() {
-    const bet = parseFloat(document.getElementById('plinko-bet').value);
+function playShaftMine() {
+    const bet = parseFloat(document.getElementById('shaft-bet').value) || 1;
     if (!validateBet(bet)) return;
     userState.balance -= bet;
     userState.gamesPlayed++;
 
-    const multipliers = [0.2, 0.5, 1.1, 2.0, 5.0, 12.0];
-    const mult = multipliers[Math.floor(Math.random() * multipliers.length)];
-    const win = bet * mult;
-    userState.balance += win;
-    if (mult >= 1) userState.wins++; else userState.losses++;
-    saveState();
+    // Анімація обертання шестерні нагорі
+    const gear = document.getElementById('shaft-gear');
+    if (gear) {
+        gear.style.transform = 'rotate(360deg)';
+        setTimeout(() => gear.style.transform = 'rotate(0deg)', 500);
+    }
 
-    document.getElementById('plinko-msg').textContent = `Коефіцієнт x${mult}! Виграш: +${win.toFixed(2)} ⭐️`;
+    // Анімація руйнування нижнього ряду
+    const bottomRowEl = document.getElementById('row-4');
+    if (bottomRowEl) {
+        const blocks = bottomRowEl.querySelectorAll('.shaft-block');
+        blocks.forEach((block, idx) => {
+            setTimeout(() => {
+                block.classList.add('breaking');
+            }, idx * 40);
+        });
+    }
+
+    setTimeout(() => {
+        // Розрахунок виграшу нижнього ряду
+        let rowWin = 0;
+        shaftRowsData[4].forEach(b => {
+            if (b.mult > 0) rowWin += bet * b.mult;
+        });
+
+        // Зсуваємо ряди вниз (падіння)
+        shaftRowsData.pop();
+        let newRow = [];
+        for (let c = 0; c < 6; c++) newRow.push(getRandomBlock());
+        shaftRowsData.unshift(newRow);
+
+        drawShaftGrid();
+
+        // Додаємо новий верхній ряд з анімацією падіння
+        const topRowEl = document.getElementById('row-0');
+        if (topRowEl) {
+            topRowEl.querySelectorAll('.shaft-block').forEach(b => b.classList.add('dropping'));
+        }
+
+        if (rowWin > 0) {
+            userState.balance += rowWin;
+            userState.wins++;
+            document.getElementById('shaft-msg').innerHTML = `<span style="color:#2ecc71;">Видобуто скарби! Виграш: +${rowWin.toFixed(2)} ⭐️</span>`;
+        } else {
+            userState.losses++;
+            document.getElementById('shaft-msg').innerHTML = `<span style="color:#a09cc0;">Порожня порода... Копай далі!</span>`;
+        }
+        saveState();
+    }, 450);
 }
 
-// 3. МІНИ
-function renderMines(container) {
-    container.innerHTML = `
-        <div class="game-panel">
-            <p style="color:#a09cc0; font-size:13px;">Відкривай клітинки без мін!</p>
-            <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:6px; margin:14px 0;">
-                ${Array(25).fill(0).map((_, i) => `<button class="bet-input" style="aspect-ratio:1; font-size:18px; cursor:pointer;" onclick="this.textContent='💎'; this.style.background='#2ecc71';">?</button>`).join('')}
-            </div>
-        </div>
-    `;
-}
-
-// 4. КЕЙСИ
-function renderCases(container) {
-    container.innerHTML = `
-        <div class="game-panel">
-            <h3 style="margin-bottom:8px;">📦 Виберіть кейс</h3>
-            <div style="display:flex; flex-direction:column; gap:10px; margin-top:10px;">
-                <button class="action-btn gold-btn" onclick="openCaseReward('Супер економ', 1)">Супер економ (1 ⭐️)</button>
-                <button class="action-btn purple-btn" onclick="openCaseReward('Економ', 2)">Економ (2 ⭐️)</button>
-                <button class="action-btn green-btn" onclick="openCaseReward('Все або нічого', 10)">Все або нічого (10 ⭐️)</button>
-            </div>
-            <div class="game-status-msg" id="case-msg" style="margin-top:14px;"></div>
-        </div>
-    `;
-}
-
-function openCaseReward(name, price) {
-    if (!validateBet(price)) return;
-    userState.balance -= price;
-    userState.gamesPlayed++;
-
-    const reward = +(Math.random() * price * 3).toFixed(2);
-    userState.balance += reward;
-    if (reward >= price) userState.wins++; else userState.losses++;
-    saveState();
-
-    document.getElementById('case-msg').textContent = `Відкрито "${name}"! Ви виграли +${reward} ⭐️`;
-}
-
-// Початковий запуск
 updateUI();

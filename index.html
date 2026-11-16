@@ -13,7 +13,7 @@
         <header class="header">
             <div class="header-left">
                 <span class="status-dot"></span>
-                <button class="icon-btn" onclick="openSettings()" title="Налаштування">⚙️</button>
+                <button class="icon-btn" onclick="openSettingsModal()" title="Налаштування">⚙️</button>
             </div>
             <div class="header-right">
                 <div class="balance-pill" onclick="openDepositModal()">
@@ -50,7 +50,7 @@
                 <div class="bonus-card" onclick="openRakebackModal()">
                     <div class="bonus-info">
                         <h3>Рейкбек</h3>
-                        <p>Повернення частини оборотних зірок (Рівень: Новачок)</p>
+                        <p>Повернення частини оборотних зірок (Новачок)</p>
                     </div>
                     <button class="action-btn green-btn">Зібрати</button>
                 </div>
@@ -58,10 +58,9 @@
 
             <!-- ВКЛАДКА 2: ГРАТИ (ГОЛОВНА) -->
             <div id="tab-play" class="tab-view active">
-                <!-- Промо-банер -->
                 <div class="promo-banner" onclick="inviteFriend()">
                     <div class="banner-content">
-                        <h2>ГРАТИ У ІГРИ В БОТІ</h2>
+                        <h2>ЗАПРОШУЙ ДРУЗІВ Й ОТРИМУЙ</h2>
                         <p>@giftstarsin</p>
                     </div>
                     <div class="banner-dots">
@@ -70,7 +69,7 @@
                     </div>
                 </div>
 
-                <!-- Секція: Найкращі ігри -->
+                <!-- Найкращі ігри -->
                 <section class="games-section">
                     <h3 class="section-title">🔥 Найкращі ігри</h3>
                     <div class="games-grid">
@@ -92,11 +91,11 @@
                     </div>
                 </section>
 
-                <!-- Секція: Аркадні ігри -->
+                <!-- Аркадні ігри -->
                 <section class="games-section">
                     <h3 class="section-title">🎮 Аркадні ігри</h3>
                     <div class="games-grid">
-                        <div class="game-card pickaxe-card" onclick="openGame('pickaxe')">
+                        <div class="game-card pickaxe-card" onclick="openGame('shaft')">
                             <div class="game-icon">⛏️</div>
                             <h4>Кирка</h4>
                         </div>
@@ -104,7 +103,7 @@
                             <div class="game-icon">✈️</div>
                             <h4>Літак</h4>
                         </div>
-                        <div class="game-card coin-card" onclick="openGame('dice')">
+                        <div class="game-card coin-card" onclick="openGame('plinko')">
                             <div class="game-icon">🪙</div>
                             <h4>Монетка</h4>
                         </div>
@@ -112,7 +111,7 @@
                             <div class="game-icon">📐</div>
                             <h4>Плінко</h4>
                         </div>
-                        <div class="game-card shaft-card" onclick="openGame('mine')">
+                        <div class="game-card shaft-card" onclick="openGame('shaft')">
                             <div class="game-icon">🛒</div>
                             <h4>Шахта</h4>
                         </div>
@@ -123,7 +122,7 @@
                     </div>
                 </section>
 
-                <!-- Секція: Класичні ігри -->
+                <!-- Класичні ігри -->
                 <section class="games-section">
                     <h3 class="section-title">💣 Класичні ігри</h3>
                     <div class="games-grid">
@@ -144,7 +143,7 @@
                 </section>
             </div>
 
-            <!-- ВКЛАДКА 3: ЛІДЕРИ (РЕЙТИНГ) -->
+            <!-- ВКЛАДКА 3: ЛІДЕРИ -->
             <div id="tab-leaders" class="tab-view" style="display: none;">
                 <h2 class="page-title">🏆 Таблиця лідерів</h2>
                 <div class="timer-banner">
@@ -215,7 +214,7 @@
 
         </main>
 
-        <!-- Нижня навігація (Footer) -->
+        <!-- Нижня навігація -->
         <nav class="bottom-nav">
             <button class="nav-item" id="nav-contests" onclick="switchTab('contests')">
                 <span class="nav-icon">🎁</span>
