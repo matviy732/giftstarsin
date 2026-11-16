@@ -13,7 +13,7 @@
         <header class="header">
             <div class="header-left">
                 <span class="status-dot"></span>
-                <button class="icon-btn settings-btn" onclick="openSettings()" title="Налаштування">⚙️</button>
+                <button class="icon-btn" onclick="openSettings()" title="Скинути прогрес">⚙️</button>
             </div>
             <div class="header-right">
                 <div class="balance-pill" onclick="addDemoBalance()">
@@ -29,20 +29,30 @@
             
             <!-- ВКЛАДКА 1: КОНКУРСИ / БОНУСИ -->
             <div id="tab-contests" class="tab-view" style="display: none;">
-                <h2 class="page-title">🎁 Конкурси та Бонуси</h2>
+                <h2 class="page-title">🎁 Бонуси та Завдання</h2>
+                
                 <div class="bonus-card">
                     <div class="bonus-info">
                         <h3>Щоденна нагорода</h3>
-                        <p>Забирай безкоштовні зірочки щодня!</p>
+                        <p>Забирай безкоштовні зірочки щодня (Серія: <span id="streak-count">0</span> дн.)</p>
                     </div>
-                    <button class="action-btn gold-btn" id="daily-bonus-btn" onclick="claimDailyBonus()">Забрати +50 ⭐️</button>
+                    <button class="action-btn gold-btn" id="daily-bonus-btn" onclick="claimDailyBonus()">+50 ⭐️</button>
                 </div>
+
                 <div class="bonus-card">
                     <div class="bonus-info">
-                        <h3>Клікер бонусів</h3>
-                        <p>Тисни на зірку та поповнюй демо-баланс</p>
+                        <h3>Клікер зірок</h3>
+                        <p>Натискай на зірку та заробляй демо-очки без ризику</p>
                     </div>
                     <button class="action-btn purple-btn" onclick="openGame('clicker')">Грати</button>
+                </div>
+
+                <div class="bonus-card">
+                    <div class="bonus-info">
+                        <h3>Запросити друга</h3>
+                        <p>Поділися посиланням на бота з друзями</p>
+                    </div>
+                    <button class="action-btn green-btn" onclick="inviteFriend()">Запросити</button>
                 </div>
             </div>
 
@@ -51,7 +61,9 @@
                 <!-- Промо-банер -->
                 <div class="promo-banner" onclick="inviteFriend()">
                     <div class="banner-content">
+                        <span class="banner-badge">БОНУС</span>
                         <h2>ЗАПРОШУЙ ДРУЗІВ І ОТРИМУЙ ⭐️</h2>
+                        <p>Натисни, щоб поділитися ботом</p>
                     </div>
                     <div class="banner-dots">
                         <span class="dot active"></span>
@@ -61,38 +73,50 @@
 
                 <!-- Секція: Найкращі ігри -->
                 <section class="games-section">
-                    <h3 class="section-title">🛡️ Найкращі ігри</h3>
+                    <h3 class="section-title">🔥 Популярні мініігри</h3>
                     <div class="games-grid">
                         <div class="game-card crash-card" onclick="openGame('crash')">
+                            <div class="card-glow"></div>
                             <div class="game-icon">🚀</div>
                             <h4>Краш</h4>
+                            <span class="game-tag">x100</span>
                         </div>
-                        <div class="game-card upgrade-card" onclick="openGame('dice')">
-                            <div class="game-icon">🎲</div>
-                            <h4>Кубик</h4>
-                        </div>
-                        <div class="game-card arena-card" onclick="openGame('mines')">
+                        <div class="game-card mines-card" onclick="openGame('mines')">
+                            <div class="card-glow"></div>
                             <div class="game-icon">💣</div>
                             <h4>Міни</h4>
+                            <span class="game-tag">5x5</span>
+                        </div>
+                        <div class="game-card dice-card" onclick="openGame('dice')">
+                            <div class="card-glow"></div>
+                            <div class="game-icon">🎲</div>
+                            <h4>Кубик</h4>
+                            <span class="game-tag">x2</span>
                         </div>
                     </div>
                 </section>
 
                 <!-- Секція: Аркадні ігри -->
                 <section class="games-section">
-                    <h3 class="section-title">🎮 Аркадні ігри</h3>
+                    <h3 class="section-title">🎮 Аркади та Фарм</h3>
                     <div class="games-grid">
-                        <div class="game-card pickaxe-card" onclick="openGame('clicker')">
-                            <div class="game-icon">⛏️</div>
-                            <h4>Кирка</h4>
+                        <div class="game-card clicker-card" onclick="openGame('clicker')">
+                            <div class="card-glow"></div>
+                            <div class="game-icon">⭐️</div>
+                            <h4>Клікер</h4>
+                            <span class="game-tag">Фарм</span>
                         </div>
                         <div class="game-card plane-card" onclick="openGame('crash')">
+                            <div class="card-glow"></div>
                             <div class="game-icon">✈️</div>
                             <h4>Літак</h4>
+                            <span class="game-tag">Топ</span>
                         </div>
                         <div class="game-card coin-card" onclick="openGame('dice')">
+                            <div class="card-glow"></div>
                             <div class="game-icon">🪙</div>
                             <h4>Монетка</h4>
+                            <span class="game-tag">50/50</span>
                         </div>
                     </div>
                 </section>
@@ -101,9 +125,8 @@
             <!-- ВКЛАДКА 3: ЛІДЕРИ (РЕЙТИНГ) -->
             <div id="tab-leaders" class="tab-view" style="display: none;">
                 <h2 class="page-title">🏆 Таблиця лідерів</h2>
-                <div class="leaders-list" id="leaders-list">
-                    <!-- Заповнюється через JS -->
-                </div>
+                <p class="subtitle-text">Локальний рейтинг гравців за кількістю демо-зірок</p>
+                <div class="leaders-list" id="leaders-list"></div>
             </div>
 
             <!-- ВКЛАДКА 4: ПРОФІЛЬ -->
@@ -116,8 +139,8 @@
 
                 <div class="stats-grid">
                     <div class="stat-box">
-                        <span class="stat-label">Баланс</span>
-                        <span class="stat-value" id="stat-balance">100.00 ⭐️</span>
+                        <span class="stat-label">Поточний баланс</span>
+                        <span class="stat-value gold-text" id="stat-balance">100.00 ⭐️</span>
                     </div>
                     <div class="stat-box">
                         <span class="stat-label">Зіграно ігор</span>
@@ -134,15 +157,13 @@
                 </div>
             </div>
 
-            <!-- ЕКРАН МІНІГРИ (Відкривається поверх при кліку на гру) -->
+            <!-- ЕКРАН МІНІГРИ -->
             <div id="game-screen" class="game-screen" style="display: none;">
                 <div class="game-top-bar">
                     <button class="back-btn" onclick="closeGame()">← Назад</button>
-                    <h3 id="current-game-title">Назва гри</h3>
+                    <h3 id="current-game-title">Мінігра</h3>
                 </div>
-                <div id="game-container" class="game-container">
-                    <!-- Сюди підвантажуватиметься конкретна гра -->
-                </div>
+                <div id="game-container" class="game-container"></div>
             </div>
 
         </main>
@@ -151,7 +172,7 @@
         <nav class="bottom-nav">
             <button class="nav-item" id="nav-contests" onclick="switchTab('contests')">
                 <span class="nav-icon">🎁</span>
-                <span class="nav-label">Конкурси</span>
+                <span class="nav-label">Бонуси</span>
             </button>
             <button class="nav-item active" id="nav-play" onclick="switchTab('play')">
                 <span class="nav-icon">⚔️</span>
