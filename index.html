@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="app-container">
-        <!-- Шапка (Header) -->
+        <!-- Шапка -->
         <header class="header">
             <div class="header-left">
                 <span class="status-dot"></span>
@@ -17,7 +17,7 @@
             </div>
             <div class="header-right">
                 <div class="balance-pill" onclick="openDepositModal()">
-                    <span id="balance-amount">0.78</span> ⭐️
+                    <span id="balance-amount">100.00</span> ⭐️
                     <button class="plus-btn">+</button>
                 </div>
                 <div class="profile-avatar" id="header-avatar" onclick="switchTab('profile')">M</div>
@@ -30,15 +30,13 @@
             <!-- ВКЛАДКА 1: КОНКУРСИ / БОНУСИ -->
             <div id="tab-contests" class="tab-view" style="display: none;">
                 <h2 class="page-title">🎁 Конкурси та Бонуси</h2>
-                
                 <div class="bonus-card" onclick="openDailyBonusModal()">
                     <div class="bonus-info">
                         <h3>Щоденний бонус</h3>
-                        <p>Крути щодня та збирай зірки (Серія: <span id="streak-count">0</span> дн.)</p>
+                        <p>Збирай зірки щодня (Серія: <span id="streak-count">0</span> дн.)</p>
                     </div>
                     <button class="action-btn gold-btn">Забрати</button>
                 </div>
-
                 <div class="bonus-card" onclick="openReferralModal()">
                     <div class="bonus-info">
                         <h3>Реферальна програма</h3>
@@ -46,7 +44,6 @@
                     </div>
                     <button class="action-btn purple-btn">Друзі</button>
                 </div>
-
                 <div class="bonus-card" onclick="openRakebackModal()">
                     <div class="bonus-info">
                         <h3>Рейкбек</h3>
@@ -56,16 +53,12 @@
                 </div>
             </div>
 
-            <!-- ВКЛАДКА 2: ГРАТИ (ГОЛОВНА) -->
+            <!-- ВКЛАДКА 2: ГРАТИ -->
             <div id="tab-play" class="tab-view active">
                 <div class="promo-banner" onclick="inviteFriend()">
                     <div class="banner-content">
                         <h2>ЗАПРОШУЙ ДРУЗІВ Й ОТРИМУЙ</h2>
                         <p>@giftstarsin</p>
-                    </div>
-                    <div class="banner-dots">
-                        <span class="dot active"></span>
-                        <span class="dot"></span>
                     </div>
                 </div>
 
@@ -73,20 +66,20 @@
                 <section class="games-section">
                     <h3 class="section-title">🔥 Найкращі ігри</h3>
                     <div class="games-grid">
-                        <div class="game-card crash-card" onclick="openGame('crash')">
+                        <div class="game-card pickaxe-card" onclick="openGame('pickaxe')">
+                            <div class="game-icon">⛏️</div>
+                            <h4>Кирка</h4>
+                            <span class="game-tag">TOP</span>
+                        </div>
+                        <div class="game-card plane-card" onclick="openGame('plane')">
                             <div class="game-icon">🚀</div>
                             <h4>Краш</h4>
-                            <span class="game-tag">x7.99</span>
+                            <span class="game-tag">CRASH</span>
                         </div>
-                        <div class="game-card upgrade-card" onclick="openGame('upgrade')">
-                            <div class="game-icon">🎁</div>
-                            <h4>Апгрейд</h4>
-                            <span class="game-tag">300 ⭐️</span>
-                        </div>
-                        <div class="game-card arena-card" onclick="openGame('arena')">
-                            <div class="game-icon">⚔️</div>
-                            <h4>Арена</h4>
-                            <span class="game-tag">PvP</span>
+                        <div class="game-card bonanza-card" onclick="openGame('bonanza')">
+                            <div class="game-icon">🍭</div>
+                            <h4>Sweet Stars</h4>
+                            <span class="game-tag">x21100</span>
                         </div>
                     </div>
                 </section>
@@ -95,29 +88,19 @@
                 <section class="games-section">
                     <h3 class="section-title">🎮 Аркадні ігри</h3>
                     <div class="games-grid">
-                        <div class="game-card pickaxe-card" onclick="openGame('shaft')">
-                            <div class="game-icon">⛏️</div>
-                            <h4>Кирка</h4>
-                        </div>
-                        <div class="game-card plane-card" onclick="openGame('crash')">
-                            <div class="game-icon">✈️</div>
-                            <h4>Літак</h4>
-                        </div>
-                        <div class="game-card coin-card" onclick="openGame('plinko')">
-                            <div class="game-icon">🪙</div>
-                            <h4>Монетка</h4>
-                        </div>
-                        <div class="game-card plinko-card" onclick="openGame('plinko')">
-                            <div class="game-icon">📐</div>
-                            <h4>Плінко</h4>
-                        </div>
-                        <div class="game-card shaft-card" onclick="openGame('shaft')">
-                            <div class="game-icon">🛒</div>
-                            <h4>Шахта</h4>
+                        <div class="game-card shaft-card" onclick="openGame('ladder')">
+                            <div class="game-icon">🪜</div>
+                            <h4>Драбинка</h4>
+                            <span class="game-tag">x35</span>
                         </div>
                         <div class="game-card cases-card" onclick="openGame('cases')">
                             <div class="game-icon">📦</div>
                             <h4>Кейси</h4>
+                            <span class="game-tag">NEW</span>
+                        </div>
+                        <div class="game-card barrel-card" onclick="openGame('barrel')">
+                            <div class="game-icon">🛢️</div>
+                            <h4>Бочок</h4>
                         </div>
                     </div>
                 </section>
@@ -129,15 +112,7 @@
                         <div class="game-card mines-card" onclick="openGame('mines')">
                             <div class="game-icon">💣</div>
                             <h4>Міна</h4>
-                        </div>
-                        <div class="game-card ladder-card" onclick="openGame('ladder')">
-                            <div class="game-icon">🪜</div>
-                            <h4>Драбинка</h4>
-                            <span class="game-tag">x16</span>
-                        </div>
-                        <div class="game-card barrel-card" onclick="openGame('barrel')">
-                            <div class="game-icon">🛢️</div>
-                            <h4>Бочок</h4>
+                            <span class="game-tag">PRO</span>
                         </div>
                     </div>
                 </section>
@@ -148,9 +123,6 @@
                 <h2 class="page-title">🏆 Таблиця лідерів</h2>
                 <div class="timer-banner">
                     До кінця сезону: <span id="season-timer">03 дні 05 годин 51 хв</span>
-                </div>
-                <div class="user-rank-card">
-                    <span>Ваше місце: <b>#1395</b> (80 ⭐️)</span>
                 </div>
                 <div class="leaders-list" id="leaders-list"></div>
             </div>
@@ -235,7 +207,6 @@
         </nav>
     </div>
 
-    <!-- МОДАЛЬНІ ВІКНА -->
     <div id="modal-overlay" class="modal-overlay" style="display: none;" onclick="closeModals()">
         <div id="modal-content" class="modal-content" onclick="event.stopPropagation()"></div>
     </div>
