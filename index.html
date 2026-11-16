@@ -27,7 +27,7 @@
         <!-- Основний контент -->
         <main class="main-content">
             
-            <!-- ВКЛАДКА 1: КОНКУРСИ / БОНУСИ -->
+            <!-- ВКЛАДКА 1: БОНУСИ -->
             <div id="tab-contests" class="tab-view" style="display: none;">
                 <h2 class="page-title">🎁 Бонуси та Завдання</h2>
                 
@@ -41,10 +41,10 @@
 
                 <div class="bonus-card">
                     <div class="bonus-info">
-                        <h3>Клікер зірок</h3>
-                        <p>Натискай на зірку та заробляй демо-очки без ризику</p>
+                        <h3>Шахта з киркою</h3>
+                        <p>Копай породу в шахті та знаходь коштовні зірки</p>
                     </div>
-                    <button class="action-btn purple-btn" onclick="openGame('clicker')">Грати</button>
+                    <button class="action-btn purple-btn" onclick="openGame('mine')">Копати</button>
                 </div>
 
                 <div class="bonus-card">
@@ -73,22 +73,19 @@
 
                 <!-- Секція: Найкращі ігри -->
                 <section class="games-section">
-                    <h3 class="section-title">🔥 Популярні мініігри</h3>
+                    <h3 class="section-title">🔥 Найкращі ігри</h3>
                     <div class="games-grid">
                         <div class="game-card crash-card" onclick="openGame('crash')">
-                            <div class="card-glow"></div>
                             <div class="game-icon">🚀</div>
                             <h4>Краш</h4>
-                            <span class="game-tag">x100</span>
+                            <span class="game-tag">1.06x+</span>
                         </div>
                         <div class="game-card mines-card" onclick="openGame('mines')">
-                            <div class="card-glow"></div>
                             <div class="game-icon">💣</div>
                             <h4>Міни</h4>
-                            <span class="game-tag">5x5</span>
+                            <span class="game-tag">8 мін</span>
                         </div>
                         <div class="game-card dice-card" onclick="openGame('dice')">
-                            <div class="card-glow"></div>
                             <div class="game-icon">🎲</div>
                             <h4>Кубик</h4>
                             <span class="game-tag">x2</span>
@@ -96,27 +93,24 @@
                     </div>
                 </section>
 
-                <!-- Секція: Аркадні ігри -->
+                <!-- Секція: Аркадні ігри, Шахта та Кейси -->
                 <section class="games-section">
-                    <h3 class="section-title">🎮 Аркади та Фарм</h3>
+                    <h3 class="section-title">🎮 Шахта, Кейси та Аркади</h3>
                     <div class="games-grid">
-                        <div class="game-card clicker-card" onclick="openGame('clicker')">
-                            <div class="card-glow"></div>
-                            <div class="game-icon">⭐️</div>
-                            <h4>Клікер</h4>
-                            <span class="game-tag">Фарм</span>
+                        <div class="game-card mine-shaft-card" onclick="openGame('mine')">
+                            <div class="game-icon">⛏️</div>
+                            <h4>Шахта</h4>
+                            <span class="game-tag">Кирка</span>
+                        </div>
+                        <div class="game-card cases-card" onclick="openGame('cases')">
+                            <div class="game-icon">📦</div>
+                            <h4>Кейси</h4>
+                            <span class="game-tag">Дроп</span>
                         </div>
                         <div class="game-card plane-card" onclick="openGame('crash')">
-                            <div class="card-glow"></div>
                             <div class="game-icon">✈️</div>
                             <h4>Літак</h4>
                             <span class="game-tag">Топ</span>
-                        </div>
-                        <div class="game-card coin-card" onclick="openGame('dice')">
-                            <div class="card-glow"></div>
-                            <div class="game-icon">🪙</div>
-                            <h4>Монетка</h4>
-                            <span class="game-tag">50/50</span>
                         </div>
                     </div>
                 </section>

@@ -12,7 +12,9 @@ let userState = JSON.parse(localStorage.getItem('giftstarsin_state')) || {
     wins: 0,
     losses: 0,
     lastBonusDate: null,
-    streak: 0
+    streak: 0,
+    mineLevel: 1,
+    mineProgress: 0
 };
 
 let crashInterval = null;
@@ -148,7 +150,7 @@ function validateBet(bet) {
 }
 
 // ==========================================
-// МІНІІГРИ: CLICKER, DICE, MINES, CRASH
+// МІНІІГРИ: ШАХТА (КИРКА), КЕЙСИ, DICE, MINES, CRASH
 // ==========================================
 
 function openGame(gameType) {
@@ -159,9 +161,12 @@ function openGame(gameType) {
 
     gameScreen.style.display = 'block';
 
-    if (gameType === 'clicker') {
-        titleEl.textContent = '⭐️ Клікер зірок';
-        renderClicker(containerEl);
+    if (gameType === 'mine') {
+        titleEl.textContent = '⛏️ Шахта (Видобуток)';
+        renderMineShaft(containerEl);
+    } else if (gameType === 'cases') {
+        titleEl.textContent = '📦 Кейси з зірками';
+        renderCases(containerEl);
     } else if (gameType === 'dice') {
         titleEl.textContent = '🎲 Кубик (Dice)';
         renderDice(containerEl);
@@ -174,34 +179,192 @@ function openGame(gameType) {
     }
 }
 
-// 1. CLICKER
-function renderClicker(container) {
+// 1. ШАХТА (КИРКА + ГЛИБИНА + РІДКІСНІ ЗНАХІДКИ)
+function renderMineShaft(container) {
+    if (!userState.mineLevel) userState.mineLevel = 1;
+    if (!userState.mineProgress) userState.mineProgress = 0;
+
+    const ores = [
+        { name: 'Камінь', icon: '🪨', reward: 0.10, chance: 0.65 },
+        { name: 'Срібна жила', icon: '🪙', reward: 0.25, chance: 0.25 },
+        { name: 'Золотий самородок', icon: '🥇', reward: 0.60, chance: 0.08 },
+        { name: 'Зоряний кристал', icon: '💎', reward: 2.00, chance: 0.02 }
+    ];
+
     container.innerHTML = `
         <div class="game-panel">
-            <p style="color:#a09cc0; font-size:13px;">Натискай на зірку! Кожен клік приносить <b>+0.25 ⭐️</b></p>
-            <button class="clicker-star-btn" id="star-click-btn">⭐️</button>
-            <div class="game-status-msg gold-text" id="clicker-msg">Тисни швидше!</div>
+            <div style="display:flex; justify-content:space-between; font-size:13px; color:#a09cc0; margin-bottom:8px;">
+                <span>Рівень шахти: <b style="color:#fff;" id="mine-lvl">${userState.mineLevel}</b></span>
+                <span>Бонус рівня: <b class="gold-text">+${((userState.mineLevel - 1) * 0.05).toFixed(2)} ⭐️</b></span>
+            </div>
+            <div class="shaft-box">
+                <div id="ore-visual" style="font-size:36px; margin-bottom:6px;">🪨</div>
+                <button class="pickaxe-hit-btn" id="pickaxe-btn">⛏️</button>
+                <p style="font-size:12px; color:#b3aee0; margin-top:6px;">Бий киркою по породі в шахті!</p>
+                <div class="shaft-progress-bar">
+                    <div class="shaft-progress-fill" id="shaft-fill" style="width: ${userState.mineProgress}%"></div>
+                </div>
+                <div style="font-size:11px; color:#8c88af; margin-top:4px;">Прогрес до наступної глибини: <span id="shaft-pct">${userState.mineProgress}%</span></div>
+            </div>
+            <div class="game-status-msg gold-text" id="mine-msg">Вдар киркою, щоб почати видобуток!</div>
         </div>
     `;
 
-    document.getElementById('star-click-btn').onclick = () => {
-        userState.balance += 0.25;
+    const btn = document.getElementById('pickaxe-btn');
+    btn.onclick = () => {
+        // Вибір руди за ймовірністю
+        const r = Math.random();
+        let acc = 0;
+        let foundOre = ores[0];
+        for (const ore of ores) {
+            acc += ore.chance;
+            if (r <= acc) {
+                foundOre = ore;
+                break;
+            }
+        }
+
+        const levelBonus = (userState.mineLevel - 1) * 0.05;
+        const totalGain = +(foundOre.reward + levelBonus).toFixed(2);
+        userState.balance += totalGain;
+
+        userState.mineProgress += 5;
+        if (userState.mineProgress >= 100) {
+            userState.mineProgress = 0;
+            userState.mineLevel += 1;
+            document.getElementById('mine-lvl').textContent = userState.mineLevel;
+        }
+
         saveState();
-        document.getElementById('clicker-msg').textContent = `+0.25 ⭐️ (Баланс: ${userState.balance.toFixed(2)})`;
-        if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('light');
+
+        document.getElementById('ore-visual').textContent = foundOre.icon;
+        document.getElementById('shaft-fill').style.width = `${userState.mineProgress}%`;
+        document.getElementById('shaft-pct').textContent = `${userState.mineProgress}%`;
+
+        const msgEl = document.getElementById('mine-msg');
+        msgEl.textContent = `${foundOre.icon} ${foundOre.name}: +${totalGain.toFixed(2)} ⭐️`;
+        msgEl.className = foundOre.reward >= 0.60 ? 'game-status-msg green-text' : 'game-status-msg gold-text';
+
+        btn.style.transform = 'rotate(-25deg) scale(0.9)';
+        setTimeout(() => { btn.style.transform = 'rotate(0deg) scale(1)'; }, 90);
+
+        if (tg?.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
     };
 }
 
-// 2. DICE
+// 2. КЕЙСИ
+function renderCases(container) {
+    const casesData = [
+        {
+            id: 'bronze',
+            name: 'Бронзовий кейс',
+            icon: '📦',
+            price: 15,
+            desc: 'Можливий дроп: від 2 ⭐️ до 40 ⭐️',
+            rewards: [
+                { val: 2, chance: 0.45 },
+                { val: 8, chance: 0.30 },
+                { val: 18, chance: 0.18 },
+                { val: 40, chance: 0.07 }
+            ]
+        },
+        {
+            id: 'silver',
+            name: 'Срібний кейс',
+            icon: '🧰',
+            price: 50,
+            desc: 'Можливий дроп: від 10 ⭐️ до 150 ⭐️',
+            rewards: [
+                { val: 10, chance: 0.48 },
+                { val: 30, chance: 0.30 },
+                { val: 75, chance: 0.16 },
+                { val: 150, chance: 0.06 }
+            ]
+        },
+        {
+            id: 'gold',
+            name: 'Зоряний мега-кейс',
+            icon: '👑',
+            price: 150,
+            desc: 'Можливий дроп: від 35 ⭐️ до 500 ⭐️',
+            rewards: [
+                { val: 35, chance: 0.50 },
+                { val: 100, chance: 0.30 },
+                { val: 250, chance: 0.15 },
+                { val: 500, chance: 0.05 }
+            ]
+        }
+    ];
+
+    container.innerHTML = `
+        <div id="case-result-box" class="case-open-result" style="display:none;"></div>
+        <div class="cases-list">
+            ${casesData.map(c => `
+                <div class="case-item-card">
+                    <div class="case-left">
+                        <div class="case-emoji">${c.icon}</div>
+                        <div>
+                            <div class="case-title">${c.name}</div>
+                            <div class="case-desc">${c.desc}</div>
+                        </div>
+                    </div>
+                    <button class="action-btn gold-btn" onclick="openCaseBox('${c.id}')">${c.price} ⭐️</button>
+                </div>
+            `).join('')}
+        </div>
+    `;
+
+    window.openCaseBox = (caseId) => {
+        const selected = casesData.find(x => x.id === caseId);
+        if (!selected) return;
+        if (!validateBet(selected.price)) return;
+
+        userState.balance -= selected.price;
+        userState.gamesPlayed += 1;
+
+        const r = Math.random();
+        let acc = 0;
+        let wonStars = selected.rewards[0].val;
+        for (const item of selected.rewards) {
+            acc += item.chance;
+            if (r <= acc) {
+                wonStars = item.val;
+                break;
+            }
+        }
+
+        userState.balance += wonStars;
+        if (wonStars >= selected.price) {
+            userState.wins += 1;
+        } else {
+            userState.losses += 1;
+        }
+        saveState();
+
+        const resBox = document.getElementById('case-result-box');
+        resBox.style.display = 'block';
+        const isProfit = wonStars >= selected.price;
+        resBox.innerHTML = `
+            <div style="font-size:42px; margin-bottom:6px;">${selected.icon}</div>
+            <div style="font-size:14px; color:#a09cc0;">Ти відкрив <b>${selected.name}</b> і вибив:</div>
+            <div style="font-size:24px; font-weight:900; margin-top:4px;" class="${isProfit ? 'green-text' : 'gold-text'}">
+                +${wonStars.toFixed(2)} ⭐️
+            </div>
+        `;
+        if (tg?.HapticFeedback) tg.HapticFeedback.notificationOccurred(isProfit ? 'success' : 'warning');
+    };
+}
+
+// 3. DICE (Без трійки: тільки 1-2 або 5-6, 3 і 4 — програш)
 function renderDice(container) {
     let selectedChoice = 'more';
     container.innerHTML = `
         <div class="game-panel">
-            <p style="color:#a09cc0; font-size:13px;">Вгадай, що випаде на кубику (1–6). Виграш <b>x2</b>!</p>
+            <p style="color:#a09cc0; font-size:13px;">Обери <b>1–2</b> або <b>5–6</b> (числа 3 та 4 — програш). Виграш <b>x2</b>!</p>
             <div class="dice-display" id="dice-result">🎲</div>
             <div class="dice-choice-row">
-                <button class="choice-btn selected" id="btn-more">Більше 3 (4, 5, 6)</button>
-                <button class="choice-btn" id="btn-less">Менше 4 (1, 2, 3)</button>
+                <button class="choice-btn selected" id="btn-more">5 або 6</button>
+                <button class="choice-btn" id="btn-less">1 або 2</button>
             </div>
             <div class="bet-controls">
                 <div class="bet-input-row">
@@ -240,7 +403,8 @@ function renderDice(container) {
         const diceFaces = ['⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
         document.getElementById('dice-result').textContent = `${diceFaces[roll - 1]} (${roll})`;
 
-        const isWin = (selectedChoice === 'more' && roll >= 4) || (selectedChoice === 'less' && roll <= 3);
+        const isWin = (selectedChoice === 'more' && (roll === 5 || roll === 6)) ||
+                      (selectedChoice === 'less' && (roll === 1 || roll === 2));
         const msgEl = document.getElementById('dice-msg');
 
         if (isWin) {
@@ -258,17 +422,18 @@ function renderDice(container) {
     };
 }
 
-// 3. MINES
+// 4. MINES (8 мін на полі)
 function renderMines(container) {
     let activeGame = false;
     let betAmount = 0;
     let bombPositions = [];
     let openedCount = 0;
     let currentMultiplier = 1.0;
+    const totalBombs = 8;
 
     container.innerHTML = `
         <div class="game-panel">
-            <p style="color:#a09cc0; font-size:13px;">На полі 5 мін. Відкривай клітинки та забирай виграш!</p>
+            <p style="color:#a09cc0; font-size:13px;">На полі <b>8 мін</b>. Відкривай клітинки та забирай виграш!</p>
             <div class="mines-grid" id="mines-grid"></div>
             <div class="bet-controls">
                 <div class="bet-input-row">
@@ -313,7 +478,7 @@ function renderMines(container) {
             cell.classList.add('safe');
             cell.textContent = '💎';
             openedCount += 1;
-            currentMultiplier = +(1 + openedCount * 0.28).toFixed(2);
+            currentMultiplier = +(1 + openedCount * 0.25).toFixed(2);
             const cashoutVal = (betAmount * currentMultiplier).toFixed(2);
             actionBtn.textContent = `Забрати ${cashoutVal} ⭐️ (x${currentMultiplier})`;
             msgEl.textContent = `Відкрито безпечних: ${openedCount}`;
@@ -333,7 +498,6 @@ function renderMines(container) {
 
     actionBtn.onclick = () => {
         if (activeGame) {
-            // Забрати виграш
             if (openedCount === 0) {
                 alert('Відкрий хоча б одну клітинку!');
                 return;
@@ -348,7 +512,6 @@ function renderMines(container) {
             revealAll();
             saveState();
         } else {
-            // Старт нової гри
             const bet = parseFloat(document.getElementById('mines-bet').value);
             if (!validateBet(bet)) return;
 
@@ -362,7 +525,7 @@ function renderMines(container) {
             currentMultiplier = 1.0;
             bombPositions = [];
 
-            while (bombPositions.length < 5) {
+            while (bombPositions.length < totalBombs) {
                 const rand = Math.floor(Math.random() * 25);
                 if (!bombPositions.includes(rand)) bombPositions.push(rand);
             }
@@ -377,11 +540,11 @@ function renderMines(container) {
     buildGrid();
 }
 
-// 4. CRASH
+// 5. CRASH (Мінімальний краш від 1.06x, ніколи не на 1.00x)
 function renderCrash(container) {
     let isFlying = false;
     let multiplier = 1.00;
-    let crashPoint = 1.00;
+    let crashPoint = 1.06;
     let betAmount = 0;
 
     container.innerHTML = `
@@ -408,7 +571,6 @@ function renderCrash(container) {
 
     actionBtn.onclick = () => {
         if (isFlying) {
-            // Забрати виграш
             clearInterval(crashInterval);
             isFlying = false;
             const win = betAmount * multiplier;
@@ -429,24 +591,31 @@ function renderCrash(container) {
             betAmount = bet;
             isFlying = true;
             multiplier = 1.00;
-            // Генерація точки крашу
-            crashPoint = +(1 + Math.random() * 4.5).toFixed(2);
-            if (Math.random() < 0.15) crashPoint = 1.05;
+
+            // Точка крашу суворо від 1.06x і вище
+            const r = Math.random();
+            if (r < 0.45) {
+                crashPoint = +(1.06 + Math.random() * 0.34).toFixed(2); // 1.06x - 1.40x
+            } else if (r < 0.80) {
+                crashPoint = +(1.41 + Math.random() * 1.09).toFixed(2); // 1.41x - 2.50x
+            } else {
+                crashPoint = +(2.51 + Math.random() * 3.50).toFixed(2); // 2.51x - 6.00x
+            }
 
             rocketEl.textContent = '🚀';
             multEl.style.color = '#f1c40f';
+            multEl.textContent = '1.00x';
             msgEl.textContent = 'Ракета летить...';
             msgEl.className = 'game-status-msg';
             actionBtn.textContent = `Забрати ${(betAmount * multiplier).toFixed(2)} ⭐️`;
 
             crashInterval = setInterval(() => {
-                multiplier += 0.03;
-                multEl.textContent = `${multiplier.toFixed(2)}x`;
-                actionBtn.textContent = `Забрати ${(betAmount * multiplier).toFixed(2)} ⭐️`;
+                multiplier = +(multiplier + 0.03).toFixed(2);
 
                 if (multiplier >= crashPoint) {
                     clearInterval(crashInterval);
                     isFlying = false;
+                    multEl.textContent = `${crashPoint.toFixed(2)}x`;
                     rocketEl.textContent = '💥';
                     multEl.style.color = '#e74c3c';
                     userState.losses += 1;
@@ -454,7 +623,11 @@ function renderCrash(container) {
                     msgEl.className = 'game-status-msg red-text';
                     actionBtn.textContent = 'Зробити ставку';
                     saveState();
+                    return;
                 }
+
+                multEl.textContent = `${multiplier.toFixed(2)}x`;
+                actionBtn.textContent = `Забрати ${(betAmount * multiplier).toFixed(2)} ⭐️`;
             }, 80);
         }
     };
