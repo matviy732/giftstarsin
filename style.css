@@ -67,10 +67,7 @@ body {
     cursor: pointer;
     font-size: 16px;
     color: #fff;
-    transition: transform 0.15s;
 }
-
-.icon-btn:active { transform: scale(0.92); }
 
 .header-right {
     display: flex;
@@ -124,11 +121,7 @@ body {
     overflow: hidden;
 }
 
-.profile-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
 /* Основний контент */
 .main-content {
@@ -141,89 +134,52 @@ body {
 .page-title {
     font-size: 20px;
     font-weight: 800;
-    margin-bottom: 8px;
-}
-
-.subtitle-text {
-    font-size: 13px;
-    color: #9b96bd;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 /* Промо-банер */
 .promo-banner {
-    background: linear-gradient(135deg, #00b09b 0%, #96c93d 100%);
+    background: linear-gradient(135deg, #2b1d54 0%, #150f2e 100%);
+    border: 1px solid rgba(142, 45, 226, 0.4);
     border-radius: 20px;
     padding: 20px 16px;
     text-align: center;
     position: relative;
     margin-bottom: 22px;
-    box-shadow: 0 8px 24px rgba(0, 176, 155, 0.35);
+    box-shadow: 0 8px 24px rgba(142, 45, 226, 0.25);
     cursor: pointer;
-    overflow: hidden;
-    transition: transform 0.15s;
-}
-
-.promo-banner:active { transform: scale(0.98); }
-
-.banner-badge {
-    display: inline-block;
-    background: rgba(0, 0, 0, 0.25);
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    margin-bottom: 6px;
 }
 
 .banner-content h2 {
-    font-size: 19px;
+    font-size: 18px;
     font-weight: 900;
     color: #fff;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-    line-height: 1.25;
+    margin-bottom: 4px;
 }
 
 .banner-content p {
-    font-size: 12px;
-    margin-top: 4px;
-    opacity: 0.9;
+    font-size: 13px;
+    color: #a09cc0;
 }
 
 .banner-dots {
     display: flex;
     justify-content: center;
     gap: 6px;
-    margin-top: 12px;
+    margin-top: 10px;
 }
 
-.dot {
-    width: 6px;
-    height: 6px;
-    background: rgba(255, 255, 255, 0.45);
-    border-radius: 50%;
-}
-
-.dot.active {
-    width: 18px;
-    border-radius: 3px;
-    background: #fff;
-}
+.dot { width: 6px; height: 6px; background: rgba(255, 255, 255, 0.4); border-radius: 50%; }
+.dot.active { width: 18px; border-radius: 3px; background: #fff; }
 
 /* Секції ігор */
-.games-section {
-    margin-bottom: 24px;
-}
+.games-section { margin-bottom: 22px; }
 
 .section-title {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 800;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     color: #f0eeff;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .games-grid {
@@ -233,7 +189,7 @@ body {
 }
 
 .game-card {
-    height: 126px;
+    height: 120px;
     border-radius: 18px;
     padding: 10px 8px;
     display: flex;
@@ -242,48 +198,41 @@ body {
     align-items: center;
     position: relative;
     cursor: pointer;
-    transition: transform 0.15s ease, box-shadow 0.2s ease;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform 0.15s ease;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.35);
 }
 
-.game-card:active {
-    transform: scale(0.94);
-}
+.game-card:active { transform: scale(0.95); }
 
 .game-tag {
     position: absolute;
-    top: 7px;
-    right: 7px;
-    background: rgba(0, 0, 0, 0.35);
+    top: 6px;
+    right: 6px;
+    background: rgba(0, 0, 0, 0.4);
     padding: 2px 6px;
     border-radius: 8px;
     font-size: 10px;
     font-weight: 800;
 }
 
-.game-icon {
-    font-size: 40px;
-    margin-top: 14px;
-    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.45));
-}
-
-.game-card h4 {
-    font-size: 14px;
-    font-weight: 800;
-    text-align: center;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
-}
+.game-icon { font-size: 38px; margin-top: 12px; }
+.game-card h4 { font-size: 13px; font-weight: 800; text-align: center; }
 
 .crash-card { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
-.mines-card { background: linear-gradient(135deg, #cb356b, #bd3f32); }
-.dice-card { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
-.mine-shaft-card { background: linear-gradient(135deg, #8a2be2, #4a00e0); }
-.cases-card { background: linear-gradient(135deg, #f2994a, #f2c94c); }
+.upgrade-card { background: linear-gradient(135deg, #2193b0, #6dd5ed); }
+.arena-card { background: linear-gradient(135deg, #cb356b, #bd3f32); }
+.pickaxe-card { background: linear-gradient(135deg, #8a2be2, #4a00e0); }
 .plane-card { background: linear-gradient(135deg, #005c97, #363795); }
+.coin-card { background: linear-gradient(135deg, #f2994a, #f2c94c); }
+.plinko-card { background: linear-gradient(135deg, #38ef7d, #11998e); }
+.shaft-card { background: linear-gradient(135deg, #eb3349, #f45c43); }
+.cases-card { background: linear-gradient(135deg, #f7b733, #fc4a1a); }
+.mines-card { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+.ladder-card { background: linear-gradient(135deg, #b224ef, #7579ff); }
+.barrel-card { background: linear-gradient(135deg, #ffb347, #ffcc33); }
 
-/* Бонуси */
+/* Бонуси та картки */
 .bonus-card {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -293,19 +242,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 12px;
+    cursor: pointer;
 }
 
-.bonus-info h3 {
-    font-size: 15px;
-    margin-bottom: 4px;
-}
-
-.bonus-info p {
-    font-size: 12px;
-    color: #a09cc0;
-    line-height: 1.3;
-}
+.bonus-info h3 { font-size: 15px; margin-bottom: 4px; }
+.bonus-info p { font-size: 12px; color: #a09cc0; }
 
 .action-btn {
     border: none;
@@ -315,19 +256,35 @@ body {
     font-size: 13px;
     cursor: pointer;
     white-space: nowrap;
-    transition: transform 0.12s;
 }
-
-.action-btn:active { transform: scale(0.95); }
-
 .gold-btn { background: linear-gradient(135deg, #f1c40f, #f39c12); color: #000; }
 .purple-btn { background: linear-gradient(135deg, #8e2de2, #4a00e0); color: #fff; }
 .green-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; }
 
 /* Лідери */
+.timer-banner {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 10px;
+    text-align: center;
+    font-size: 13px;
+    color: #f1c40f;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.user-rank-card {
+    background: rgba(142, 45, 226, 0.15);
+    border: 1px solid rgba(142, 45, 226, 0.4);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 14px;
+    text-align: center;
+    font-size: 13px;
+}
+
 .leader-row {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.07);
     border-radius: 14px;
     padding: 12px 16px;
     margin-bottom: 8px;
@@ -336,90 +293,107 @@ body {
     align-items: center;
 }
 
-.leader-row.is-me {
-    border-color: rgba(241, 196, 15, 0.5);
-    background: rgba(241, 196, 15, 0.08);
-}
-
-.leader-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.leader-rank {
-    font-weight: 900;
-    width: 26px;
-    color: #f1c40f;
-}
+.leader-left { display: flex; align-items: center; gap: 12px; }
+.leader-rank { font-weight: 900; width: 26px; color: #f1c40f; }
 
 /* Профіль */
 .profile-header-card {
     background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
-    padding: 24px;
+    padding: 20px;
     text-align: center;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
 }
 
 .profile-big-avatar {
-    width: 76px;
-    height: 76px;
+    width: 68px;
+    height: 68px;
     background: linear-gradient(135deg, #8e2de2, #4a00e0);
     border-radius: 50%;
-    margin: 0 auto 12px;
+    margin: 0 auto 10px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30px;
+    font-size: 26px;
     font-weight: 800;
-    box-shadow: 0 0 20px rgba(142, 45, 226, 0.5);
-    overflow: hidden;
 }
 
-.profile-big-avatar img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
+.profile-tag { color: #8c88af; font-size: 13px; }
 
-.profile-tag {
-    color: #8c88af;
-    font-size: 13px;
-}
-
-.stats-grid {
+.balance-stats-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 14px;
 }
 
-.stat-box {
+.bal-box {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+}
+
+.bal-label { font-size: 12px; color: #a09cc0; display: block; margin-bottom: 4px; }
+.bal-val { font-size: 16px; font-weight: 800; color: #f1c40f; }
+
+.profile-action-btns {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+}
+
+.action-main-btn {
+    padding: 12px;
+    border-radius: 14px;
+    border: none;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+}
+.deposit-btn { background: linear-gradient(135deg, #2ecc71, #27ae60); color: #fff; }
+.withdraw-btn { background: rgba(255, 255, 255, 0.1); color: #fff; border: 1px solid rgba(255, 255, 255, 0.2); }
+
+.menu-link-row {
+    width: 100%;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    padding: 16px;
+    border-radius: 14px;
+    padding: 14px 16px;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    cursor: pointer;
 }
 
-.stat-label {
-    font-size: 12px;
-    color: #8c88af;
+/* Модальні вікна */
+.modal-overlay {
+    position: absolute;
+    top: 0; bottom: 0; left: 0; right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: flex-end;
+    z-index: 100;
 }
 
-.stat-value {
-    font-size: 18px;
-    font-weight: 800;
+.modal-content {
+    width: 100%;
+    background: #151128;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    padding: 20px;
+    max-height: 85vh;
+    overflow-y: auto;
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
 }
 
-.gold-text { color: #f1c40f; }
-.green-text { color: #2ecc71; }
-.red-text { color: #e74c3c; }
-
-/* Екран гри та ігрові компоненти */
+/* Екран гри */
 .game-top-bar {
     display: flex;
     align-items: center;
@@ -452,10 +426,7 @@ body {
     margin-top: 16px;
 }
 
-.bet-input-row {
-    display: flex;
-    gap: 8px;
-}
+.bet-input-row { display: flex; gap: 8px; }
 
 .bet-input {
     flex: 1;
@@ -492,184 +463,7 @@ body {
     box-shadow: 0 6px 20px rgba(142, 45, 226, 0.4);
 }
 
-.play-main-btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.game-status-msg {
-    margin-top: 12px;
-    font-size: 14px;
-    font-weight: 700;
-    min-height: 20px;
-}
-
-/* Шахта (Кирка) */
-.shaft-box {
-    background: radial-gradient(circle, #2a1f5c, #130e2e);
-    border: 2px solid rgba(142, 45, 226, 0.5);
-    border-radius: 20px;
-    padding: 20px;
-    margin: 14px 0;
-}
-
-.pickaxe-hit-btn {
-    width: 130px;
-    height: 130px;
-    border-radius: 50%;
-    border: 4px solid rgba(241, 196, 15, 0.6);
-    background: radial-gradient(circle, #8e2de2, #4a00e0);
-    font-size: 62px;
-    cursor: pointer;
-    margin: 10px auto;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 30px rgba(142, 45, 226, 0.55);
-    transition: transform 0.08s;
-}
-
-.shaft-progress-bar {
-    width: 100%;
-    height: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 6px;
-    overflow: hidden;
-    margin-top: 12px;
-}
-
-.shaft-progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #f1c40f, #2ecc71);
-    transition: width 0.15s;
-}
-
-/* Кейси */
-.cases-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.case-item-card {
-    background: rgba(255, 255, 255, 0.06);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 18px;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    text-align: left;
-}
-
-.case-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.case-emoji {
-    font-size: 40px;
-}
-
-.case-title {
-    font-size: 16px;
-    font-weight: 800;
-}
-
-.case-desc {
-    font-size: 12px;
-    color: #a09cc0;
-    margin-top: 2px;
-}
-
-.case-open-result {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(241, 196, 15, 0.4);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 14px;
-    text-align: center;
-}
-
-/* Dice */
-.dice-display {
-    font-size: 64px;
-    margin: 16px 0;
-}
-
-.dice-choice-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.choice-btn {
-    padding: 12px;
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.choice-btn.selected {
-    background: #f1c40f;
-    color: #000;
-    border-color: #f1c40f;
-}
-
-/* Mines */
-.mines-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-    margin: 16px 0;
-}
-
-.mine-cell {
-    aspect-ratio: 1;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 10px;
-    font-size: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-}
-
-.mine-cell.safe {
-    background: rgba(46, 204, 113, 0.25);
-    border-color: #2ecc71;
-}
-
-.mine-cell.bomb {
-    background: rgba(231, 76, 60, 0.35);
-    border-color: #e74c3c;
-}
-
-/* Crash */
-.crash-display {
-    height: 140px;
-    background: rgba(0, 0, 0, 0.35);
-    border-radius: 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 14px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.crash-multiplier {
-    font-size: 42px;
-    font-weight: 900;
-    color: #f1c40f;
-}
+.game-status-msg { margin-top: 12px; font-size: 14px; font-weight: 700; min-height: 20px; }
 
 /* Нижня навігація */
 .bottom-nav {
@@ -699,15 +493,11 @@ body {
     cursor: pointer;
     font-size: 11px;
     font-weight: 700;
-    transition: all 0.2s;
     padding: 6px 12px;
     border-radius: 16px;
 }
 
-.nav-item .nav-icon {
-    font-size: 18px;
-}
-
+.nav-item .nav-icon { font-size: 18px; }
 .nav-item.active {
     color: #ffffff;
     background: linear-gradient(135deg, rgba(142, 45, 226, 0.35), rgba(74, 0, 224, 0.35));
