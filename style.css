@@ -231,7 +231,7 @@ body {
 }
 
 .cases-card {
-  background: linear-gradient(135deg, #f7b733, #fc4a1a);
+  background: linear-gradient(135deg, #a83228, #d9534f);
 }
 
 .barrel-card {
@@ -526,14 +526,182 @@ body {
   width: 100%;
   border-radius: 14px;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.15);
-  background: #110d24;
-  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.8);
+  border: 2px solid rgba(255, 255, 255, 0.18);
+  background: #0c091c;
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9);
 }
 
 canvas {
   display: block;
   width: 100%;
+  image-rendering: pixelated;
+}
+
+/* ПАДАЮЧА КИРКА HUD & BANNER */
+.pickaxe-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 6px 12px;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.pickaxe-drop-banner {
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(241, 196, 15, 0.35);
+  border-radius: 12px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pk-drop-badge {
+  font-weight: 900;
+  font-size: 13px;
+  color: #f1c40f;
+}
+
+/* NFT СЛОТИ */
+.nft-slot-panel {
+  background: linear-gradient(180deg, #9b311f 0%, #631b11 100%);
+  border-radius: 20px;
+  padding: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.nft-live-bar {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+}
+
+.nft-live-tag {
+  font-weight: 900;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: 0.5px;
+  flex-shrink: 0;
+}
+
+.nft-live-items {
+  display: flex;
+  gap: 10px;
+  font-size: 22px;
+}
+
+.nft-reels-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+  position: relative;
+}
+
+.nft-reels-container::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+}
+
+.nft-reel {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  height: 195px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  padding: 6px 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nft-symbol {
+  font-size: 38px;
+  transition: transform 0.15s ease;
+  filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.4));
+}
+
+.nft-symbol.center-row {
+  transform: scale(1.18);
+}
+
+.nft-bet-pills {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  padding: 4px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.nft-bet-pill {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-weight: 800;
+  font-size: 13px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nft-bet-pill.active {
+  background: rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.nft-action-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.nft-sub-btn {
+  background: rgba(255, 255, 255, 0.14);
+  border: none;
+  border-radius: 14px;
+  padding: 10px;
+  color: #fff;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.nft-spin-btn {
+  width: 100%;
+  background: #2c88ff;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  color: #fff;
+  font-weight: 800;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(44, 136, 255, 0.45);
+}
+
+.nft-spin-btn:disabled {
+  opacity: 0.6;
 }
 
 /* SWEET STARS (Bonanza) */
@@ -542,7 +710,6 @@ canvas {
   padding: 8px;
   border-radius: 16px;
   border: 3px solid #ffd54f;
-  box-shadow: 0 0 25px rgba(255, 117, 140, 0.45), inset 0 0 15px rgba(0, 0, 0, 0.3);
 }
 
 .bonanza-grid {
@@ -563,15 +730,11 @@ canvas {
   align-items: center;
   justify-content: center;
   font-size: 23px;
-  position: relative;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .bz-cell.bomb {
   background: radial-gradient(circle, #ffeb3b, #ff5722);
   border: 2px solid #fff;
-  box-shadow: 0 0 12px #ffeb3b;
 }
 
 .bz-bomb-val {
@@ -587,12 +750,10 @@ canvas {
 @keyframes popExplode {
   0% {
     transform: scale(1);
-    filter: brightness(1);
   }
 
   50% {
     transform: scale(1.35);
-    filter: brightness(2);
     background: rgba(241, 196, 15, 0.6);
   }
 
@@ -619,7 +780,7 @@ canvas {
 }
 
 .bz-drop {
-  animation: cascadeDrop 0.32s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: cascadeDrop 0.32s ease forwards;
 }
 
 .bonanza-hud {
@@ -633,43 +794,7 @@ canvas {
   font-weight: 800;
 }
 
-/* ІНШІ ІГРИ */
-.pickaxe-hud {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.45);
-  padding: 6px 12px;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  font-size: 12px;
-  font-weight: 700;
-}
-
-.tier-selector {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-bottom: 8px;
-}
-
-.tier-btn {
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  padding: 6px 4px;
-  border-radius: 10px;
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.tier-btn.active {
-  background: rgba(241, 196, 15, 0.25);
-  border-color: #f1c40f;
-  color: #f1c40f;
-}
-
+/* МІНИ, ДРАБИНКА, БОЧОК */
 .mines-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -728,40 +853,6 @@ canvas {
 .ladder-step.current {
   border: 2px solid #2ecc71;
   box-shadow: 0 0 10px #2ecc71;
-}
-
-.cases-grid-select {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  margin-bottom: 12px;
-}
-
-.case-select-card {
-  background: rgba(255, 255, 255, 0.06);
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  border-radius: 14px;
-  padding: 12px;
-  text-align: center;
-  cursor: pointer;
-}
-
-.case-select-card.selected {
-  border-color: #f1c40f;
-  background: rgba(241, 196, 15, 0.15);
-}
-
-.case-roulette-box {
-  height: 90px;
-  background: #0c091c;
-  border-radius: 12px;
-  border: 2px solid #f1c40f;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 32px;
-  margin-bottom: 12px;
-  overflow: hidden;
 }
 
 .barrels-grid {
