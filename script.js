@@ -4,7 +4,7 @@ if (tg) {
     tg.expand();
 }
 
-let userState = JSON.parse(localStorage.getItem('giftstarsin_v24_state')) || {
+let userState = JSON.parse(localStorage.getItem('giftstarsin_v25_state')) || {
     balance: 100.00,
     deposits: 589.00,
     withdraws: 397.78,
@@ -19,7 +19,7 @@ let userState = JSON.parse(localStorage.getItem('giftstarsin_v24_state')) || {
 let animFrameId = null;
 
 function saveState() {
-    localStorage.setItem('giftstarsin_v24_state', JSON.stringify(userState));
+    localStorage.setItem('giftstarsin_v25_state', JSON.stringify(userState));
     updateUI();
 }
 
@@ -55,8 +55,8 @@ function initTelegramProfile() {
         const hAv = document.getElementById('header-avatar');
         const bAv = document.getElementById('profile-big-avatar');
         if (user.photo_url) {
-            if (hAv) hAv.innerHTML = `<img src="${user.photo_url}">`;
-            if (bAv) bAv.innerHTML = `<img src="${user.photo_url}">`;
+            if (hAv) hAv.innerHTML = `<img src="${user.photo_url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+            if (bAv) bAv.innerHTML = `<img src="${user.photo_url}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
         } else {
             if (hAv) hAv.textContent = letter;
             if (bAv) bAv.textContent = letter;
@@ -536,7 +536,7 @@ function renderFallingPickaxe(container) {
 }
 
 // ============================================================
-// 2. АВІАМАСТЕР (Літак летить, знизу платформа рухається назустріч, навколо вода)
+// 2. АВІАМАСТЕР (Літак летить, знизу платформи рухаються назустріч, навколо вода)
 // ============================================================
 function renderPlaneCrashGame(container) {
     container.innerHTML = `
@@ -572,18 +572,16 @@ function renderPlaneCrashGame(container) {
 
     let isPlaying = false, isLanding = false, planeX = 100, planeY = 80, currentMultiplier = 1.0, betAmount = 50;
     let missiles = [];
-    let platforms = []; // Платформи, що з'являються та рухаються назустріч
+    let platforms = [];
     let starsBg = Array(25).fill(0).map(() => ({ x: Math.random() * 360, y: Math.random() * 210, size: Math.random() * 2 + 1, speed: Math.random() * 3 + 1 }));
 
     function drawScene(px, py, hitRocket) {
-        // Небо
         let bgGrad = ctx.createLinearGradient(0, 0, 0, canvas.height);
         bgGrad.addColorStop(0, '#0a061a');
         bgGrad.addColorStop(1, '#1b143f');
         ctx.fillStyle = bgGrad;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Зірки
         ctx.fillStyle = '#ffffff';
         starsBg.forEach(s => {
             ctx.globalAlpha = Math.random() * 0.8 + 0.2;
@@ -595,7 +593,6 @@ function renderPlaneCrashGame(container) {
         });
         ctx.globalAlpha = 1.0;
 
-        // Ворожі ракети
         missiles.forEach(m => {
             ctx.fillStyle = '#e74c3c';
             ctx.fillRect(m.x, m.y, 22, 10);
@@ -603,14 +600,11 @@ function renderPlaneCrashGame(container) {
             ctx.fillRect(m.x + 22, m.y + 3, 8, 4);
         });
 
-        // НИЖНЯ ЧАСТИНА: ВОДА ТА ПЛАТФОРМИ, ЩО З'ЯВЛЯЮТЬСЯ
         const groundY = canvas.height - 25;
         
-        // Суцільна вода на фоні знизу
         ctx.fillStyle = '#2980b9';
         ctx.fillRect(0, groundY, canvas.width, 25);
 
-        // Рендер платформ, що пливуть назустріч
         platforms.forEach(p => {
             ctx.fillStyle = '#2ecc71';
             ctx.fillRect(p.x, groundY, p.w, 25);
@@ -620,7 +614,6 @@ function renderPlaneCrashGame(container) {
             ctx.fillText('🛬 ПЛАТФОРМА', p.x + p.w / 2, groundY + 16);
         });
 
-        // ВИНИЩУВАЧ (ЛІТАЧОК)
         ctx.save();
         ctx.translate(px, py);
         
@@ -667,11 +660,9 @@ function renderPlaneCrashGame(container) {
             currentMultiplier = +(currentMultiplier + 0.025).toFixed(2);
             planeY = 70 + Math.sin(Date.now() / 250) * 30;
         } else {
-            // Посадка вниз
             planeY += 3.5;
             
             if (planeY >= canvas.height - 35) {
-                // Перевіряємо, чи під літаком платформа під час приземлення, чи вода!
                 isPlaying = false;
                 let landedOnPlatform = false;
                 platforms.forEach(p => {
@@ -681,13 +672,11 @@ function renderPlaneCrashGame(container) {
                 });
 
                 if (landedOnPlatform) {
-                    // Успішна посадка на платформу!
                     const win = +(betAmount * currentMultiplier).toFixed(2);
                     userState.balance += win; userState.wins++; saveState();
                     if (statusEl) statusEl.textContent = 'Успіх!';
                     if (msgEl) msgEl.innerHTML = `<span style="color:#2ecc71; font-weight:bold;">Успішна посадка на платформу! Виграш: +${win} ⭐️ (${currentMultiplier}x)</span>`;
                 } else {
-                    // Бульк у воду! Ставка згоріла
                     userState.losses++; saveState();
                     if (statusEl) statusEl.textContent = 'Бульк!';
                     if (msgEl) msgEl.innerHTML = `<span style="color:#e74c3c; font-weight:bold;">Літак впав у воду! Ставка згоріла.</span>`;
@@ -699,23 +688,19 @@ function renderPlaneCrashGame(container) {
 
         if (multEl) multEl.textContent = `${currentMultiplier.toFixed(2)}x`;
 
-        // Рух ракет і платформ назустріч
         missiles.forEach(m => { m.x -= 4.5; });
         platforms.forEach(p => { p.x -= 3.0; });
 
-        // Спавн нових ракет
         if (Math.random() < 0.03 && missiles.length < 2 && !isLanding) {
             missiles.push({ x: canvas.width + 20, y: 20 + Math.random() * 100 });
         }
         missiles = missiles.filter(m => m.x > -30);
 
-        // Спавн нових платформ знизу
         if (Math.random() < 0.02 && platforms.length < 2) {
             platforms.push({ x: canvas.width + 50, w: 90 });
         }
         platforms = platforms.filter(p => p.x > -100);
 
-        // Зіткнення з ракетою (ДІЛИТЬ НА 2)
         for (let m of missiles) {
             if (Math.abs(m.x - planeX) < 25 && Math.abs(m.y - planeY) < 20) {
                 currentMultiplier = +(currentMultiplier / 2).toFixed(2);
@@ -936,13 +921,13 @@ function renderBarrelGame(container) {
         </div>
     `;
     window.pickBarrel = (idx) => {
-        const betInput = container.querySelector('#barrel-bet');
+        const betInput = document.getElementById('barrel-bet');
         const bet = parseFloat(betInput ? betInput.value : 10);
         if (!validateBet(bet)) return;
         userState.balance -= bet; userState.gamesPlayed++; saveState();
 
         const winningIdx = Math.floor(Math.random() * 3);
-        const msgEl = container.querySelector('#barrel-msg');
+        const msgEl = document.getElementById('barrel-msg');
         if (idx === winningIdx) {
             const win = bet * 3.0;
             userState.balance += win; userState.wins++; saveState();
@@ -976,7 +961,7 @@ function renderLadderGame(container) {
 
     if (startBtn) {
         startBtn.onclick = () => {
-            const betInput = container.querySelector('#ladder-bet');
+            const betInput = document.getElementById('ladder-bet');
             currentBet = parseFloat(betInput ? betInput.value : 10);
             if (!validateBet(currentBet)) return;
             userState.balance -= currentBet; userState.gamesPlayed++; saveState();
